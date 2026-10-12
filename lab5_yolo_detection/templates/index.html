@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLO API - Nhận diện Object từ ảnh Upload (Lab 5)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .header-section {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid #334155;
+            padding: 2.5rem 0;
+        }
+        .upload-card {
+            background: #1e293b;
+            border: 2px dashed #475569;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .upload-card:hover, .upload-card.dragover {
+            border-color: #38bdf8;
+            background: #1e293b80;
+            transform: translateY(-2px);
+        }
+        .preview-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .preview-img {
+            max-height: 520px;
+            width: 100%;
+            object-fit: contain;
+            background: #0b0f19;
+        }
+        .badge-tag {
+            background: #38bdf820;
+            color: #38bdf8;
+            border: 1px solid #38bdf840;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .loader {
+            display: none;
+        }
+        .loader.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-section text-center">
+        <div class="container">
+            <span class="badge bg-info text-dark fw-bold mb-2 px-3 py-2 rounded-pill">
+                <i class="bi bi-cpu-fill me-1"></i> Python Lab 5 - YOLOv8 Object Detection
+            </span>
+            <h1 class="display-6 fw-bold text-white mb-2">Hệ thống Nhận diện Vật thể (Object Detection)</h1>
+            <p class="text-slate-400 mb-3">Tải lên hình ảnh để phát hiện đối tượng với mô hình YOLO AI tiên tiến</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/classes" target="_blank" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-tags-fill me-1"></i> Xem danh sách 80 Classes
+                </a>
+                <a href="/docs" target="_blank" class="btn btn-outline-info btn-sm rounded-pill px-3">
+                    <i class="bi bi-file-code-fill me-1"></i> API Documentation (Swagger)
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="row justify-content-center g-4">
+            <!-- Upload Box -->
+            <div class="col-12 col-lg-5">
+                <div class="card bg-slate-800 border-secondary-subtle p-4 rounded-4 shadow-sm" style="background:#1e293b; border: 1px solid #334155;">
+                    <h5 class="fw-bold text-white mb-3"><i class="bi bi-cloud-arrow-up-fill text-info me-2"></i>Tải ảnh lên để nhận diện</h5>
+
+                    <!-- Drop Zone -->
+                    <div id="dropZone" class="upload-card mb-3">
+                        <i class="bi bi-file-earmark-image fs-1 text-info d-block mb-2"></i>
+                        <p class="mb-1 fw-semibold text-white">Kéo & thả ảnh vào đây hoặc bấm để chọn</p>
+                        <p class="small text-muted mb-0">Hỗ trợ: <code>.jpg</code>, <code>.jpeg</code>, <code>.png</code> (Tối đa <strong>5MB</strong>)</p>
+                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png" style="display: none;">
+                    </div>
+
+                    <!-- Selected File Info -->
+                    <div id="fileInfo" class="alert alert-info py-2 px-3 rounded-3 small d-none align-items-center justify-content-between mb-3">
+                        <span id="fileName" class="text-truncate me-2"></span>
+                        <span id="fileSize" class="badge bg-secondary"></span>
+                    </div>
+
+                    <!-- Button Submit -->
+                    <button id="detectBtn" class="btn btn-info w-100 py-2 fw-bold rounded-pill text-dark d-flex align-items-center justify-content-center gap-2" disabled>
+                        <i class="bi bi-eye-fill"></i> Nhận diện Vật thể (POST /upload)
+                    </button>
+
+                    <hr class="my-4 border-secondary opacity-25">
+
+                    <!-- Requirements checklist -->
+                    <div class="small text-secondary">
+                        <div class="fw-semibold text-white mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i> Tiêu chí đề bài:</div>
+                        <ul class="list-unstyled ps-2 mb-0">
+                            <li>✓ Route <code>POST /upload</code> nhận file dạng form-data</li>
+                            <li>✓ Lưu ảnh tạm vào thư mục <code>uploads/</code></li>
+                            <li>✓ Chạy mô hình YOLOv8 và vẽ Bounding Boxes</li>
+                            <li>✓ Trả về ảnh kết quả dạng <code>image/jpeg</code></li>
+                            <li>✓ Giới hạn dung lượng file ≤ 5MB</li>
+                            <li>✓ Ghi log các lần thành công vào <code>detection.log</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Box -->
+            <div class="col-12 col-lg-7">
+                <div class="preview-card p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3 border-secondary border-opacity-25">
+                        <h5 class="fw-bold text-white mb-0">
+                            <i class="bi bi-image-fill text-warning me-2"></i>Kết quả Nhận diện
+                        </h5>
+                        <a id="downloadBtn" href="#" download="detected_result.jpg" class="btn btn-outline-light btn-sm rounded-pill d-none">
+                            <i class="bi bi-download me-1"></i> Tải ảnh về
+                        </a>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div id="loader" class="loader flex-column align-items-center justify-content-center py-5">
+                        <div class="spinner-border text-info mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <p class="text-white fw-semibold mb-1">Đang xử lý hình ảnh qua mô hình YOLOv8...</p>
+                        <p class="text-muted small">Mô hình AI đang tìm kiếm và vẽ bounding boxes</p>
+                    </div>
+
+                    <!-- Placeholder before upload -->
+                    <div id="placeholder" class="text-center py-5 text-secondary">
+                        <i class="bi bi-camera fs-1 opacity-25 d-block mb-3"></i>
+                        <p class="mb-1 text-slate-400">Chưa có ảnh nào được xử lý</p>
+                        <p class="small text-muted">Vui lòng chọn ảnh ở cột bên trái và bấm "Nhận diện Vật thể"</p>
+                    </div>
+
+                    <!-- Result Image Container -->
+                    <div id="resultContainer" class="d-none text-center">
+                        <img id="resultImage" src="" alt="Detected Objects" class="img-fluid rounded-3 preview-img mb-3 border border-secondary border-opacity-25 shadow">
+                        <div class="alert alert-success py-2 px-3 rounded-3 small text-start">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Nhận diện thành công! Kết quả đã được ghi vào file <code>detection.log</code>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 border-top border-secondary border-opacity-25 text-secondary small">
+        <div class="container">
+            <span>Bài tập Lab 5: <strong>FastAPI + YOLOv8 + Object Detection</strong></span>
+        </div>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const detectBtn = document.getElementById('detectBtn');
+        const loader = document.getElementById('loader');
+        const placeholder = document.getElementById('placeholder');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultImage = document.getElementById('resultImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let selectedFile = null;
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            const validExts = ['.jpg', '.jpeg', '.png'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!validExts.includes(fileExt)) {
+                alert('Chỉ chấp nhận file định dạng .jpg, .jpeg, hoặc .png!');
+                return;
+            }
+
+            // Check size <= 5MB
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Kích thước file vượt quá 5MB! Vui lòng chọn ảnh nhỏ hơn.');
+                return;
+            }
+
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+            fileInfo.classList.remove('d-none');
+            fileInfo.classList.add('d-flex');
+            detectBtn.disabled = false;
+        }
+
+        detectBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            detectBtn.disabled = true;
+            placeholder.classList.add('d-none');
+            resultContainer.classList.add('d-none');
+            downloadBtn.classList.add('d-none');
+            loader.classList.add('active');
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errJson = await response.json().catch(() => null);
+                    throw new Error(errJson?.detail || 'Lỗi khi gửi yêu cầu nhận diện');
+                }
+
+                // Response is image/jpeg
+                const blob = await response.blob();
+                const imgUrl = URL.createObjectURL(blob);
+                
+                resultImage.src = imgUrl;
+                downloadBtn.href = imgUrl;
+                downloadBtn.classList.remove('d-none');
+
+                loader.classList.remove('active');
+                resultContainer.classList.remove('d-none');
+            } catch (err) {
+                loader.classList.remove('active');
+                placeholder.classList.remove('d-none');
+                alert('Có lỗi xảy ra: ' + err.message);
+            } finally {
+                detectBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Thêm người dùng mới{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <a href="/users" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+            </a>
+            <span class="text-muted small">Route: <code>/users/add</code></span>
+        </div>
+
+        <div class="custom-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-person-plus-fill fs-3"></i>
+                </div>
+                <h3 class="fw-bold mb-1">Thêm Người dùng Mới</h3>
+                <p class="text-muted small">Nhập thông tin bên dưới để tạo tài khoản người dùng vào MySQL</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger d-flex align-items-center gap-2 rounded-3 shadow-sm mb-4" role="alert">
+                <i class="bi bi-exclamation-circle-fill fs-5"></i>
+                <div>{{ error }}</div>
+            </div>
+            {% endif %}
+
+            <form action="/users/add" method="POST" autocomplete="off">
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ name|default('') }}" required placeholder="Ví dụ: Nguyễn Văn A">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">Địa chỉ Email <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email|default('') }}" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-text">Hệ thống sẽ kiểm tra trùng lặp email tự động.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold">Mật khẩu <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-shield-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" required placeholder="Nhập mật khẩu an toàn...">
+                    </div>
+                    <div class="form-text">Mật khẩu sẽ được băm bảo mật bằng thuật toán <strong>Bcrypt</strong> trước khi lưu vào CSDL.</div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-gradient py-2 rounded-pill shadow-sm">
+                        <i class="bi bi-check2-circle me-1"></i> Lưu người dùng
+                    </button>
+                    <a href="/users" class="btn btn-light py-2 rounded-pill text-muted">Huỷ bỏ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

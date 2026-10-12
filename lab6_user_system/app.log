@@ -1,0 +1,24 @@
+[2026-10-12 15:43:15] [INFO] - Đã đảm bảo CSDL 'user_system' tồn tại.
+[2026-10-12 15:43:15] [INFO] - Đã đảm bảo bảng 'users' tồn tại với cấu trúc đầy đủ.
+[2026-10-12 15:43:16] [INFO] - [THÊM] [Init Data] Thêm người dùng mẫu: ID=1, Name='Nguyễn Văn An', Email='nguyenvanan@example.com'
+[2026-10-12 15:43:16] [INFO] - [THÊM] [Init Data] Thêm người dùng mẫu: ID=2, Name='Trần Thị Bích', Email='tranthibich@example.com'
+[2026-10-12 15:43:16] [INFO] - [THÊM] [Init Data] Thêm người dùng mẫu: ID=3, Name='Lê Hoàng Cường', Email='lehoangcuong@example.com'
+[2026-10-12 15:43:16] [INFO] - [THÊM] [Init Data] Thêm người dùng mẫu: ID=4, Name='Phạm Minh Dung', Email='phamminhdung@example.com'
+[2026-10-12 15:43:16] [INFO] - [THÊM] [Init Data] Thêm người dùng mẫu: ID=5, Name='Hoàng Quốc Em', Email='hoangquocem@example.com'
+[2026-10-12 15:44:25] [INFO] - Đang khởi tạo cơ sở dữ liệu MySQL...
+[2026-10-12 15:44:25] [INFO] - Đã đảm bảo CSDL 'user_system' tồn tại.
+[2026-10-12 15:44:25] [INFO] - Đã đảm bảo bảng 'users' tồn tại với cấu trúc đầy đủ.
+[2026-10-12 15:44:25] [INFO] - Khởi tạo cơ sở dữ liệu thành công!
+[2026-10-12 15:44:56] [INFO] - [THÊM] Người dùng mới ID=6, Name='Nguyễn Kiểm Thử', Email='test_1791794696@aptech.vn'
+[2026-10-12 15:44:56] [INFO] - [SỬA] Cập nhật người dùng ID=6, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794696@aptech.vn'
+[2026-10-12 15:44:56] [INFO] - [XOÁ] Xoá người dùng ID=6, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794696@aptech.vn'
+[2026-10-12 15:46:07] [INFO] - [THÊM] Người dùng mới ID=7, Name='Nguyễn Kiểm Thử', Email='test_1791794767@aptech.vn'
+[2026-10-12 15:46:07] [INFO] - [SỬA] Cập nhật người dùng ID=7, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794767@aptech.vn'
+[2026-10-12 15:46:07] [INFO] - [XOÁ] Xoá người dùng ID=7, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794767@aptech.vn'
+[2026-10-12 15:46:43] [INFO] - Đang khởi tạo cơ sở dữ liệu MySQL...
+[2026-10-12 15:46:43] [INFO] - Đã đảm bảo CSDL 'user_system' tồn tại.
+[2026-10-12 15:46:43] [INFO] - Đã đảm bảo bảng 'users' tồn tại với cấu trúc đầy đủ.
+[2026-10-12 15:46:43] [INFO] - Khởi tạo cơ sở dữ liệu thành công!
+[2026-10-12 15:47:01] [INFO] - [THÊM] Người dùng mới ID=8, Name='Nguyễn Kiểm Thử', Email='test_1791794820@aptech.vn'
+[2026-10-12 15:47:01] [INFO] - [SỬA] Cập nhật người dùng ID=8, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794820@aptech.vn'
+[2026-10-12 15:47:01] [INFO] - [XOÁ] Xoá người dùng ID=8, Name='Nguyễn Kiểm Thử (Đã Sửa)', Email='test_1791794820@aptech.vn'

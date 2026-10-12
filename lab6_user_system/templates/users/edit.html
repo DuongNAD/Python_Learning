@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Chỉnh sửa người dùng #{{ user.id }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <a href="/users" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+            </a>
+            <span class="text-muted small">Route: <code>/users/edit/{{ user.id }}</code></span>
+        </div>
+
+        <div class="custom-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-warning-subtle text-warning d-inline-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-pencil-square fs-3 text-warning"></i>
+                </div>
+                <h3 class="fw-bold mb-1">Chỉnh sửa Người dùng</h3>
+                <p class="text-muted small">Mã ID: <strong>#{{ user.id }}</strong> | Ngày tạo: {{ user.created_at }}</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger d-flex align-items-center gap-2 rounded-3 shadow-sm mb-4" role="alert">
+                <i class="bi bi-exclamation-circle-fill fs-5"></i>
+                <div>{{ error }}</div>
+            </div>
+            {% endif %}
+
+            <form action="/users/edit/{{ user.id }}" method="POST" autocomplete="off">
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">Địa chỉ Email <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold">Mật khẩu mới</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted"><i class="bi bi-shield-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Để trống nếu không muốn đổi mật khẩu">
+                    </div>
+                    <div class="form-text">Nếu nhập mật khẩu mới, hệ thống sẽ tự động băm lại bằng <strong>Bcrypt</strong>.</div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary py-2 rounded-pill shadow-sm">
+                        <i class="bi bi-arrow-repeat me-1"></i> Cập nhật thay đổi
+                    </button>
+                    <a href="/users" class="btn btn-light py-2 rounded-pill text-muted">Huỷ bỏ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

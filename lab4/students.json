@@ -1,0 +1,37 @@
+[
+    {
+        "id": "SV001",
+        "name": "Nguyễn Văn An",
+        "age": 20,
+        "major": "Công nghệ thông tin",
+        "gpa": 3.65
+    },
+    {
+        "id": "SV002",
+        "name": "Trần Thị Bích",
+        "age": 21,
+        "major": "Khoa học máy tính",
+        "gpa": 3.82
+    },
+    {
+        "id": "SV003",
+        "name": "Lê Hoàng Cường",
+        "age": 20,
+        "major": "Kỹ thuật phần mềm",
+        "gpa": 3.45
+    },
+    {
+        "id": "SV004",
+        "name": "Phạm Minh Dung",
+        "age": 22,
+        "major": "Hệ thống thông tin",
+        "gpa": 3.9
+    },
+    {
+        "id": "SV005",
+        "name": "Vũ Hải Đăng",
+        "age": 21,
+        "major": "An toàn thông tin",
+        "gpa": 3.55
+    }
+]

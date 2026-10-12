@@ -1,0 +1,5 @@
+Python là ngôn ngữ lập trình phổ biến và dễ học.
+FastAPI cung cấp hiệu năng cao tương đương NodeJS và Go.
+Trí tuệ nhân tạo và học máy đang phát triển với tốc độ chóng mặt.
+Học lập trình đòi hỏi sự kiên nhẫn, thực hành liên tục và tư duy phản biện sắc bén.
+Chúc bạn có một buổi học Python thật nhiều niềm vui và hiệu quả!

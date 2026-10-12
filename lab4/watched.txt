@@ -1,0 +1,3 @@
+[16:00:43] Khởi tạo file theo dõi ban đầu.
+[16:00:48] Người dùng vừa đăng nhập vào hệ thống.
+[16:00:53] Cập nhật trạng thái đơn hàng #1002 thành Đang giao.

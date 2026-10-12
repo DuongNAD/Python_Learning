@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Danh sách người dùng{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="h3 fw-bold mb-1 text-slate-900">Quản lý Người dùng</h2>
+        <p class="text-muted mb-0">Hệ thống CRUD người dùng kết nối MySQL, FastAPI và Jinja2</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-secondary rounded-pill py-2 px-3 fs-7">
+            <i class="bi bi-people me-1"></i> Tổng: {{ users|length }} người dùng
+        </span>
+        <a href="/users/add" class="btn btn-gradient rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-1">
+            <i class="bi bi-plus-circle-fill"></i> Thêm người dùng mới
+        </a>
+    </div>
+</div>
+
+<div class="custom-card overflow-hidden">
+    <div class="p-3 bg-white border-bottom d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+        <div class="input-group search-box" style="max-width: 320px;">
+            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+            <input type="text" id="searchInput" class="form-control border-start-0 bg-light" placeholder="Tìm theo tên hoặc email...">
+        </div>
+        <div class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i> Mật khẩu đã được băm an toàn bằng Bcrypt
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-custom align-middle mb-0" id="userTable">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 70px;" class="ps-4">ID</th>
+                    <th scope="col">Họ và tên</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" style="width: 200px;">Thời gian tạo</th>
+                    <th scope="col" style="width: 170px;" class="text-end pe-4">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if users %}
+                    {% for user in users %}
+                    <tr>
+                        <td class="ps-4 fw-semibold text-secondary">#{{ user.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="avatar-placeholder rounded-circle bg-primary-subtle text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                    {{ user.name[:1]|upper }}
+                                </div>
+                                <span class="fw-medium text-dark user-name">{{ user.name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-muted user-email"><i class="bi bi-envelope me-1"></i>{{ user.email }}</span>
+                        </td>
+                        <td>
+                            <span class="badge-date">
+                                <i class="bi bi-clock me-1"></i>{{ user.created_at }}
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="/users/edit/{{ user.id }}" class="btn btn-outline-primary" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil-square me-1"></i> Sửa
+                                </a>
+                                <a href="/users/delete/{{ user.id }}" class="btn btn-outline-danger" title="Xoá người dùng">
+                                    <i class="bi bi-trash3 me-1"></i> Xoá
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
+                            <p class="mb-2">Chưa có người dùng nào trong cơ sở dữ liệu.</p>
+                            <a href="/users/add" class="btn btn-sm btn-primary rounded-pill">Thêm người dùng đầu tiên</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Tìm kiếm tức thời trên client
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#userTable tbody tr');
+        rows.forEach(row => {
+            const name = row.querySelector('.user-name')?.textContent.toLowerCase() || '';
+            const email = row.querySelector('.user-email')?.textContent.toLowerCase() || '';
+            if (name.includes(query) || email.includes(query)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

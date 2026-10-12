@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Xác nhận xoá người dùng #{{ user.id }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-7 col-lg-5">
+        <div class="custom-card p-4 p-md-5 text-center">
+            <div class="rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                <i class="bi bi-exclamation-triangle-fill fs-2"></i>
+            </div>
+            <h3 class="fw-bold text-danger mb-2">Xác nhận Xoá</h3>
+            <p class="text-muted mb-4">Bạn có chắc chắn muốn xoá người dùng này không? Hành động này không thể hoàn tác trong cơ sở dữ liệu.</p>
+
+            <div class="bg-light rounded-3 p-3 text-start mb-4 border">
+                <div class="mb-2"><strong>ID:</strong> #{{ user.id }}</div>
+                <div class="mb-2"><strong>Họ và tên:</strong> {{ user.name }}</div>
+                <div class="mb-2"><strong>Email:</strong> {{ user.email }}</div>
+                <div><strong>Ngày tạo:</strong> {{ user.created_at }}</div>
+            </div>
+
+            <form action="/users/delete/{{ user.id }}" method="POST">
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-danger py-2 rounded-pill shadow-sm">
+                        <i class="bi bi-trash3-fill me-1"></i> Có, xoá vĩnh viễn
+                    </button>
+                    <a href="/users" class="btn btn-outline-secondary py-2 rounded-pill">Huỷ bỏ, quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
